@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"2- NF 224661 - R\\\\$ 232,14 - Ped 00998773 - Fevereiro 2026.pdf\" 2>&1; echo \"---\"; ls *.pdf)",
+      "Read(//c/atl-flow-Reader/**)",
+      "Bash(curl -sv -X POST http://127.0.0.1:8002/nf/ -F 'file=@2- NF 224661 - R$ 232,14 - Ped 00998773 - Fevereiro 2026.pdf' -w \"\\\\nHTTP_STATUS:%{http_code}\\\\n\")",
+      "Bash(curl -v -X POST http://127.0.0.1:8002/nf/ -F 'file=@2- NF 224661 - R$ 232,14 - Ped 00998773 - Fevereiro 2026.pdf')",
+      "Bash(echo \"EXIT:$?\")"
+    ]
+  }
+}
