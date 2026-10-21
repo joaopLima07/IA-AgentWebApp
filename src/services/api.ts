@@ -73,6 +73,9 @@ async function request<T>(path: string, options: RequestOptions = {}, isRetry = 
   }
 
   const response = await fetch(`${baseUrl}${path}`, {
+    // The refresh-token cookie is set/cleared by /login and /logout; with the API on another origin
+    // the browser only stores or sends it when credentials are included.
+    credentials: "include",
     ...rest,
     headers: finalHeaders,
   });

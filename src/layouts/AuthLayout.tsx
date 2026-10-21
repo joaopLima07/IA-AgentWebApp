@@ -5,18 +5,18 @@ import logoIcon from "@/assets/logo-icon.png";
 const features = [
   {
     icon: Zap,
-    title: "Implante agentes em minutos",
-    description: "Lance agentes de IA prontos para produção sem escrever uma linha de código de infraestrutura.",
+    title: "O agente certo, automaticamente",
+    description: "Faça sua pergunta e a plataforma escolhe o agente mais adequado para responder, com a resposta aparecendo em tempo real.",
   },
   {
     icon: ShieldCheck,
-    title: "Segurança de nível empresarial",
-    description: "SSO, logs de auditoria e acesso baseado em função integrados desde o primeiro dia.",
+    title: "Acesso por função",
+    description: "Proprietários e administradores configuram os agentes. Os demais usuários conversam com eles com segurança.",
   },
   {
     icon: BarChart3,
-    title: "Visibilidade total",
-    description: "Acompanhe conversas, tokens e tempos de resposta em tempo real.",
+    title: "Acompanhe o uso",
+    description: "Veja no painel as conversas, o consumo de tokens e o tempo de resposta dos seus agentes.",
   },
 ];
 
@@ -48,10 +48,10 @@ export function AuthLayout() {
         <div className="relative space-y-8">
           <div className="space-y-3">
             <h1 className="text-3xl font-semibold leading-tight tracking-tight">
-              Seus agentes de IA, impulsionando seu negócio.
+              Todos os seus agentes de IA, em um só lugar.
             </h1>
             <p className="text-sm text-white/60">
-              Um workspace para criar, implantar e monitorar todos os agentes de IA da sua organização.
+              Converse, configure e acompanhe os agentes da sua organização em um único workspace.
             </p>
           </div>
           <div className="space-y-5">
