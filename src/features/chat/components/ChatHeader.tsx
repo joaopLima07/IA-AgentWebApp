@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Archive, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,12 +32,7 @@ export function ChatHeader({ conversation }: { conversation: Conversation }) {
   return (
     <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border px-4 sm:px-6">
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <h2 className="truncate text-sm font-semibold">{conversation.agentName}</h2>
-          <Badge variant="secondary" className="hidden sm:inline-flex">
-            {conversation.title}
-          </Badge>
-        </div>
+        <h2 className="truncate text-sm font-semibold">{conversation.title}</h2>
       </div>
 
       <DropdownMenu>

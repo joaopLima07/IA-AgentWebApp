@@ -1,4 +1,3 @@
-import { mockOrganization } from "@/mocks/user";
 import { apiClient } from "@/services/api";
 import { API_CONFIG } from "@/services/config";
 import { ApiRequestError } from "@/types/api";
@@ -134,10 +133,5 @@ export const authService = {
     } catch {
       return null;
     }
-  },
-
-  /** No backend endpoint yet — still mocked. */
-  getOrganization() {
-    return mockOrganization;
   },
 };

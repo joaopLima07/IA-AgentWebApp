@@ -1,4 +1,3 @@
-import { mockAgents } from "@/mocks/agents";
 import { apiClient } from "@/services/api";
 import { API_CONFIG } from "@/services/config";
 import { ApiRequestError } from "@/types/api";
@@ -42,19 +41,11 @@ interface CreateConversationResponse {
   createdAt: string;
 }
 
-// The backend picks the agent per message (router) and does not return
-// activity dates or a last-message preview yet. The placeholder agent keeps
-// the mocked chat stream working until POST /{id}/messages is wired.
-const placeholderAgent = () => mockAgents.find((a) => a.status === "ACTIVE") ?? mockAgents[0];
-
 function fromSummary(c: ConversationSummaryResponse): Conversation {
-  const agent = placeholderAgent();
   return {
     id: String(c.id),
     title: c.title,
     lastMessage: c.lastMessage ?? "",
-    agentId: agent.id,
-    agentName: agent.name,
     status: c.status,
     createdAt: "",
     updatedAt: "",
@@ -119,13 +110,10 @@ export const conversationService = {
       { title: "Nova conversa", status: "ACTIVE" },
       conversationsApi,
     );
-    const agent = placeholderAgent();
     return {
       id: String(created.id),
       title: created.title,
       lastMessage: "",
-      agentId: agent.id,
-      agentName: agent.name,
       status: created.status,
       createdAt: created.createdAt,
       updatedAt: created.createdAt,
