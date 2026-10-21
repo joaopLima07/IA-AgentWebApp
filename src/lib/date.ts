@@ -2,7 +2,11 @@ import { isToday, isYesterday, format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import type { Conversation } from "@/types";
 
+// The backend does not return conversation dates yet, so they can be empty.
+const isValidDate = (dateStr: string) => !!dateStr && !Number.isNaN(new Date(dateStr).getTime());
+
 export function conversationDateGroup(dateStr: string): string {
+  if (!isValidDate(dateStr)) return "Recentes";
   const date = new Date(dateStr);
   if (isToday(date)) return "Hoje";
   if (isYesterday(date)) return "Ontem";
@@ -12,7 +16,7 @@ export function conversationDateGroup(dateStr: string): string {
   return format(date, "MMMM 'de' yyyy", { locale: ptBR });
 }
 
-const GROUP_ORDER = ["Hoje", "Ontem", "Últimos 7 dias", "Últimos 30 dias"];
+const GROUP_ORDER = ["Recentes", "Hoje", "Ontem", "Últimos 7 dias", "Últimos 30 dias"];
 
 export function groupConversationsByDate(conversations: Conversation[]): [string, Conversation[]][] {
   const groups = new Map<string, Conversation[]>();
@@ -34,13 +38,16 @@ export function groupConversationsByDate(conversations: Conversation[]): [string
 }
 
 export function relativeTime(dateStr: string): string {
+  if (!isValidDate(dateStr)) return "";
   return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: ptBR });
 }
 
 export function formatDate(dateStr: string, pattern = "d MMM yyyy"): string {
+  if (!isValidDate(dateStr)) return "";
   return format(new Date(dateStr), pattern, { locale: ptBR });
 }
 
 export function formatDateTime(dateStr: string): string {
+  if (!isValidDate(dateStr)) return "";
   return format(new Date(dateStr), "d MMM yyyy 'às' HH:mm", { locale: ptBR });
 }

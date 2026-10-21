@@ -8,7 +8,7 @@ export function UserMessage({ message }: { message: Message }) {
 
   return (
     <div className="flex items-start justify-end gap-3">
-      <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-sm sm:max-w-[70%]">
+      <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-sm selection:bg-primary-foreground/30 sm:max-w-[70%]">
         <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
       </div>
       <Avatar className="mt-0.5 size-7 shrink-0">

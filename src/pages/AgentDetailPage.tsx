@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Bot, FileText, Save } from "lucide-react";
+import { ArrowLeft, Bot, Lock, Save } from "lucide-react";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { isOwnerOrAdmin } from "@/lib/permissions";
 import { useAgent, useUpdateAgent } from "@/features/agents/hooks/useAgents";
 import { PageLoader } from "@/components/common/PageLoader";
 import { ErrorState } from "@/components/common/ErrorState";
@@ -10,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AgentStatusBadge } from "@/features/agents/components/AgentStatusBadge";
@@ -29,6 +30,8 @@ export default function AgentDetailPage() {
   const navigate = useNavigate();
   const { data: agent, isLoading, isError, refetch } = useAgent(agentId);
   const updateAgent = useUpdateAgent(agentId ?? "");
+  const { user } = useAuth();
+  const canEdit = isOwnerOrAdmin(user?.role);
 
   const [draft, setDraft] = useState<Agent | null>(null);
 
@@ -45,6 +48,7 @@ export default function AgentDetailPage() {
   const isDirty = JSON.stringify(draft) !== JSON.stringify(agent);
 
   const handleSave = () => {
+    if (!canEdit) return;
     updateAgent.mutate(draft);
   };
 
@@ -71,10 +75,17 @@ export default function AgentDetailPage() {
             </div>
           </div>
 
-          <Button onClick={handleSave} disabled={!isDirty || updateAgent.isPending} className="shrink-0 gap-1.5">
-            <Save className="size-4" />
-            {updateAgent.isPending ? "Salvando..." : "Salvar alterações"}
-          </Button>
+          {canEdit ? (
+            <Button onClick={handleSave} disabled={!isDirty || updateAgent.isPending} className="shrink-0 gap-1.5">
+              <Save className="size-4" />
+              {updateAgent.isPending ? "Salvando..." : "Salvar alterações"}
+            </Button>
+          ) : (
+            <Badge variant="outline" className="shrink-0 gap-1.5">
+              <Lock className="size-3" />
+              Somente leitura
+            </Badge>
+          )}
         </div>
 
         <Tabs defaultValue="information" className="mt-6">
@@ -82,11 +93,10 @@ export default function AgentDetailPage() {
             <TabsTrigger value="information">Informações</TabsTrigger>
             <TabsTrigger value="model">Modelo</TabsTrigger>
             <TabsTrigger value="instructions">Instruções</TabsTrigger>
-            <TabsTrigger value="tools">Ferramentas</TabsTrigger>
-            <TabsTrigger value="knowledge">Conhecimento</TabsTrigger>
             <TabsTrigger value="permissions">Permissões</TabsTrigger>
           </TabsList>
 
+          <fieldset disabled={!canEdit} className="m-0 min-w-0 border-0 p-0">
           <TabsContent value="information" className="space-y-5">
             <div className="grid gap-2">
               <Label htmlFor="agent-name">Nome do agente</Label>
@@ -189,50 +199,6 @@ export default function AgentDetailPage() {
             </p>
           </TabsContent>
 
-          <TabsContent value="tools" className="space-y-3">
-            {draft.tools.map((tool) => (
-              <div key={tool.id} className="flex items-start justify-between gap-4 rounded-lg border border-border p-4">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-mono text-sm font-medium">{tool.name}</p>
-                    <Badge variant="outline">{tool.category}</Badge>
-                  </div>
-                  <p className="mt-1 text-sm text-muted-foreground">{tool.description}</p>
-                </div>
-                <Switch
-                  checked={tool.enabled}
-                  onCheckedChange={(checked) =>
-                    setDraft({
-                      ...draft,
-                      tools: draft.tools.map((t) => (t.id === tool.id ? { ...t, enabled: checked } : t)),
-                    })
-                  }
-                  aria-label={`Ativar ou desativar ${tool.name}`}
-                />
-              </div>
-            ))}
-            {draft.tools.length === 0 && <p className="text-sm text-muted-foreground">Nenhuma ferramenta configurada.</p>}
-          </TabsContent>
-
-          <TabsContent value="knowledge" className="space-y-3">
-            {draft.knowledgeSources.map((source) => (
-              <div key={source.id} className="flex items-center justify-between rounded-lg border border-border p-4">
-                <div className="flex items-center gap-2.5">
-                  <FileText className="size-4 text-muted-foreground" />
-                  <p className="text-sm font-medium">{source.name}</p>
-                </div>
-                <span className="text-xs text-muted-foreground">{source.documentCount} documentos</span>
-              </div>
-            ))}
-            {draft.knowledgeSources.length === 0 && (
-              <p className="text-sm text-muted-foreground">Nenhuma fonte de conhecimento vinculada a este agente.</p>
-            )}
-            <Separator />
-            <p className="text-xs text-muted-foreground">
-              Gerencie os documentos subjacentes na página <span className="font-medium text-foreground">Base de Conhecimento</span>.
-            </p>
-          </TabsContent>
-
           <TabsContent value="permissions" className="space-y-3">
             {draft.permissions.map((perm) => (
               <div key={perm.id} className="flex items-start justify-between gap-4 rounded-lg border border-border p-4">
@@ -253,6 +219,7 @@ export default function AgentDetailPage() {
               </div>
             ))}
           </TabsContent>
+          </fieldset>
         </Tabs>
       </div>
     </div>

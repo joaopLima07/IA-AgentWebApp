@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useCreateConversation } from "@/features/conversations/hooks/useConversations";
-import { mockAgents } from "@/mocks/agents";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -21,8 +20,7 @@ export function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) {
   const createConversation = useCreateConversation();
 
   const handleNewConversation = () => {
-    const defaultAgent = mockAgents.find((a) => a.status === "ACTIVE") ?? mockAgents[0];
-    createConversation.mutate(defaultAgent.id, {
+    createConversation.mutate(undefined, {
       onSuccess: (conversation) => navigate(`/c/${conversation.id}`),
       onError: () => toast.error("Não foi possível iniciar uma nova conversa"),
     });

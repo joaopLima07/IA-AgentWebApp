@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { Loader2, Lock, Mail } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -35,8 +34,8 @@ export default function LoginPage() {
       const from = (location.state as { from?: Location })?.from?.pathname ?? "/";
       navigate(from, { replace: true });
     } catch (error) {
-      toast.error("Não foi possível entrar", {
-        description: error instanceof ApiRequestError ? error.message : "Verifique suas credenciais e tente novamente.",
+      setErrors({
+        password: error instanceof ApiRequestError ? error.message : "E-mail ou senha incorretos.",
       });
     } finally {
       setIsSubmitting(false);
@@ -89,7 +88,10 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 className="pl-9"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
+                }}
                 aria-invalid={!!errors.password}
                 aria-describedby={errors.password ? "password-error" : undefined}
               />

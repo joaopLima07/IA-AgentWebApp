@@ -1,15 +1,19 @@
 /**
- * Central place to flip from mock services to the real Java/Spring Boot
- * backend. Every feature service checks USE_MOCKS (or, in practice, simply
- * gets swapped for an HTTP-backed implementation of the same interface)
- * so components never need to change.
+ * Backend origin, e.g. `https://my-api.azurewebsites.net`. Set VITE_API_BASE_URL
+ * at build time (it is baked into the bundle). Leave it empty in development:
+ * requests then go to relative `/api/...` paths and the Vite dev proxy forwards
+ * them to the backend.
  */
+const API_ORIGIN = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
+
 export const API_CONFIG = {
-  authBaseUrl: import.meta.env.VITE_AUTH_API_BASE_URL ?? "/api/auth",
-  agentsBaseUrl: import.meta.env.VITE_AGENTS_API_BASE_URL ?? "/api/agents",
-  baseUrl: import.meta.env.VITE_API_BASE_URL ?? "/api/v1",
-  sseUrl: import.meta.env.VITE_SSE_URL ?? "/api/v1/stream",
-  useMocks: (import.meta.env.VITE_USE_MOCKS ?? "true") === "true",
+  authBaseUrl: `${API_ORIGIN}/api/auth`,
+  agentsBaseUrl: `${API_ORIGIN}/api/agents`,
+  conversationsBaseUrl: `${API_ORIGIN}/api/conversations`,
+  // Sending a message is `POST {conversationsBaseUrl}/{id}/messages` (SSE).
+  chatBaseUrl: `${API_ORIGIN}/api/conversations`,
+  panelBaseUrl: `${API_ORIGIN}/api/panel`,
+  baseUrl: `${API_ORIGIN}/api`,
   mockLatencyMs: 450,
 };
 

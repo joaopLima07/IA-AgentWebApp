@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { MessageSquare, Search } from "lucide-react";
 import { useConversations, useDeleteConversation, useArchiveConversation, useUnarchiveConversation } from "@/features/conversations/hooks/useConversations";
 import { ConversationItem } from "./ConversationItem";
+import { RenameConversationDialog } from "./RenameConversationDialog";
 import { groupConversationsByDate } from "@/lib/date";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,6 +26,7 @@ export function ConversationList() {
   const archiveConversation = useArchiveConversation();
   const unarchiveConversation = useUnarchiveConversation();
   const [pendingDelete, setPendingDelete] = useState<Conversation | null>(null);
+  const [pendingRename, setPendingRename] = useState<Conversation | null>(null);
 
   const filtered = useMemo(() => {
     if (!conversations) return [];
@@ -91,6 +93,7 @@ export function ConversationList() {
                   <ConversationItem
                     key={conversation.id}
                     conversation={conversation}
+                    onRename={setPendingRename}
                     onDelete={setPendingDelete}
                     onArchive={(c) => archiveConversation.mutate(c.id)}
                     onUnarchive={(c) => unarchiveConversation.mutate(c.id)}
@@ -100,6 +103,8 @@ export function ConversationList() {
             </div>
           ))}
       </div>
+
+      <RenameConversationDialog conversation={pendingRename} onOpenChange={(open) => !open && setPendingRename(null)} />
 
       <AlertDialog open={!!pendingDelete} onOpenChange={(open) => !open && setPendingDelete(null)}>
         <AlertDialogContent>

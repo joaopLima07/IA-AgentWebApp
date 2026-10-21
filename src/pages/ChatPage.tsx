@@ -8,7 +8,6 @@ import { ChatHeader } from "@/features/chat/components/ChatHeader";
 import { MessageList } from "@/features/chat/components/MessageList";
 import { MessageInput } from "@/features/chat/components/MessageInput";
 import { PageLoader } from "@/components/common/PageLoader";
-import { mockAgents } from "@/mocks/agents";
 import { toast } from "sonner";
 
 export default function ChatPage() {
@@ -19,10 +18,7 @@ export default function ChatPage() {
   const hasSentInitialMessage = useRef(false);
 
   const { data: conversation, isLoading: isLoadingConversation } = useConversation(conversationId);
-  const { messages, isLoading, isStreaming, sendMessage, stopStreaming } = useChatStream(
-    conversationId,
-    conversation?.agentId
-  );
+  const { messages, isLoading, isStreaming, sendMessage, stopStreaming } = useChatStream(conversationId, conversation?.title);
 
   const initialMessage = (location.state as { initialMessage?: string } | null)?.initialMessage;
 
@@ -36,8 +32,7 @@ export default function ChatPage() {
   }, [initialMessage, conversation]);
 
   const handleSendFromEmptyState = (content: string) => {
-    const defaultAgent = mockAgents.find((a) => a.status === "ACTIVE") ?? mockAgents[0];
-    createConversation.mutate(defaultAgent.id, {
+    createConversation.mutate(undefined, {
       onSuccess: (newConversation) => {
         navigate(`/c/${newConversation.id}`, { state: { initialMessage: content } });
       },

@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { Bot, FileText, Wrench } from "lucide-react";
+import { Bot } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AgentStatusBadge } from "./AgentStatusBadge";
-import { relativeTime } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import type { Agent } from "@/types";
 
@@ -27,20 +26,6 @@ export function AgentCard({ agent }: { agent: Agent }) {
           <AgentStatusBadge status={agent.status} />
           <Badge variant="outline">{agent.provider}</Badge>
           <Badge variant="outline">{agent.model}</Badge>
-        </div>
-
-        <div className="flex items-center justify-between border-t border-border px-5 py-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1">
-              <Wrench className="size-3.5" />
-              {agent.toolCount} ferramentas
-            </span>
-            <span className="flex items-center gap-1">
-              <FileText className="size-3.5" />
-              {agent.documentCount} documentos
-            </span>
-          </div>
-          <span>Atualizado {relativeTime(agent.updatedAt)}</span>
         </div>
       </Card>
     </Link>

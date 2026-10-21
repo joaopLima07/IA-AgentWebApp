@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Archive, MoreVertical, Trash2 } from "lucide-react";
+import { Archive, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { useArchiveConversation, useDeleteConversation } from "@/features/conversations/hooks/useConversations";
+import { RenameConversationDialog } from "@/features/conversations/components/RenameConversationDialog";
 import type { Conversation } from "@/types";
 
 export function ChatHeader({ conversation }: { conversation: Conversation }) {
@@ -27,6 +28,7 @@ export function ChatHeader({ conversation }: { conversation: Conversation }) {
   const archiveConversation = useArchiveConversation();
   const deleteConversation = useDeleteConversation();
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [renaming, setRenaming] = useState(false);
 
   return (
     <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border px-4 sm:px-6">
@@ -46,6 +48,10 @@ export function ChatHeader({ conversation }: { conversation: Conversation }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem onSelect={() => setRenaming(true)}>
+            <Pencil className="size-4" />
+            Renomear conversa
+          </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => archiveConversation.mutate(conversation.id)}>
             <Archive className="size-4" />
             Arquivar conversa
@@ -56,6 +62,11 @@ export function ChatHeader({ conversation }: { conversation: Conversation }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <RenameConversationDialog
+        conversation={renaming ? conversation : null}
+        onOpenChange={(open) => !open && setRenaming(false)}
+      />
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent>

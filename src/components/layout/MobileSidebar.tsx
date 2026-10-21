@@ -7,7 +7,6 @@ import { ConversationList } from "@/features/conversations/components/Conversati
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCreateConversation } from "@/features/conversations/hooks/useConversations";
-import { mockAgents } from "@/mocks/agents";
 import { toast } from "sonner";
 
 interface MobileSidebarProps {
@@ -20,8 +19,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
   const createConversation = useCreateConversation();
 
   const handleNewConversation = () => {
-    const defaultAgent = mockAgents.find((a) => a.status === "ACTIVE") ?? mockAgents[0];
-    createConversation.mutate(defaultAgent.id, {
+    createConversation.mutate(undefined, {
       onSuccess: (conversation) => {
         navigate(`/c/${conversation.id}`);
         onOpenChange(false);

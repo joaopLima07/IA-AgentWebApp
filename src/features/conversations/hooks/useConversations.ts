@@ -28,10 +28,22 @@ export function useConversation(id: string | undefined) {
 export function useCreateConversation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (agentId: string) => conversationService.create(agentId),
+    mutationFn: () => conversationService.create(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: conversationKeys.all });
     },
+  });
+}
+
+export function useRenameConversation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, title }: { id: string; title: string }) => conversationService.rename(id, title),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: conversationKeys.all });
+      toast.success("Conversa renomeada");
+    },
+    onError: () => toast.error("Não foi possível renomear a conversa", { description: "Tente novamente." }),
   });
 }
 

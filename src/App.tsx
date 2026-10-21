@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { PublicOnlyRoute } from "@/routes/PublicOnlyRoute";
+import { OwnerAdminRoute } from "@/routes/OwnerAdminRoute";
 import { AppLayout } from "@/layouts/AppLayout";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { PageLoader } from "@/components/common/PageLoader";
@@ -10,7 +11,6 @@ const ChatPage = lazy(() => import("@/pages/ChatPage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const AgentsPage = lazy(() => import("@/pages/AgentsPage"));
 const AgentDetailPage = lazy(() => import("@/pages/AgentDetailPage"));
-const KnowledgePage = lazy(() => import("@/pages/KnowledgePage"));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/RegisterPage"));
@@ -35,10 +35,11 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<ChatPage />} />
             <Route path="/c/:conversationId" element={<ChatPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route element={<OwnerAdminRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
             <Route path="/agents" element={<AgentsPage />} />
             <Route path="/agents/:agentId" element={<AgentDetailPage />} />
-            <Route path="/knowledge" element={<KnowledgePage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
         </Route>

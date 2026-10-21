@@ -1,12 +1,7 @@
 export interface DashboardSummary {
   totalConversations: number;
-  conversationsDelta: number;
   totalMessages: number;
-  messagesDelta: number;
-  resolutionRate: number;
-  resolutionDelta: number;
   totalTokens: number;
-  tokensDelta: number;
 }
 
 export interface TimeSeriesPoint {
@@ -34,7 +29,6 @@ export interface DashboardData {
   summary: DashboardSummary;
   conversationsOverTime: TimeSeriesPoint[];
   agentUsage: AgentUsagePoint[];
-  toolOutcomes: ToolCallOutcomePoint[];
   tokenUsage: TimeSeriesPoint[];
   responseTime: ResponseTimePoint[];
 }

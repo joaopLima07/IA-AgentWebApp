@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Archive, ArchiveRestore, MoreHorizontal, Trash2 } from "lucide-react";
+import { Archive, ArchiveRestore, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Conversation } from "@/types";
 import {
@@ -12,12 +12,13 @@ import { Button } from "@/components/ui/button";
 
 interface ConversationItemProps {
   conversation: Conversation;
+  onRename: (conversation: Conversation) => void;
   onDelete: (conversation: Conversation) => void;
   onArchive: (conversation: Conversation) => void;
   onUnarchive: (conversation: Conversation) => void;
 }
 
-export function ConversationItem({ conversation, onDelete, onArchive, onUnarchive }: ConversationItemProps) {
+export function ConversationItem({ conversation, onRename, onDelete, onArchive, onUnarchive }: ConversationItemProps) {
   return (
     <NavLink
       to={`/c/${conversation.id}`}
@@ -47,6 +48,15 @@ export function ConversationItem({ conversation, onDelete, onArchive, onUnarchiv
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault();
+              onRename(conversation);
+            }}
+          >
+            <Pencil className="size-4" />
+            Renomear
+          </DropdownMenuItem>
           {conversation.status === "ACTIVE" ? (
             <DropdownMenuItem
               onSelect={(e) => {

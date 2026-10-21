@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Bot, BookOpen, Settings } from "lucide-react";
+import { LayoutDashboard, Bot, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { isOwnerOrAdmin } from "@/lib/permissions";
 import {
   Tooltip,
   TooltipContent,
@@ -8,16 +10,18 @@ import {
 } from "@/components/ui/tooltip";
 
 const items = [
-  { to: "/dashboard", label: "Painel", icon: LayoutDashboard },
+  { to: "/dashboard", label: "Painel", icon: LayoutDashboard, adminOnly: true },
   { to: "/agents", label: "Agentes", icon: Bot },
-  { to: "/knowledge", label: "Base de Conhecimento", icon: BookOpen },
   { to: "/settings", label: "Configurações", icon: Settings },
 ];
 
 export function SidebarNav({ collapsed = false }: { collapsed?: boolean }) {
+  const { user } = useAuth();
+  const visibleItems = items.filter((item) => !item.adminOnly || isOwnerOrAdmin(user?.role));
+
   return (
     <nav className="flex flex-col gap-0.5 px-2" aria-label="Navegação da plataforma">
-      {items.map(({ to, label, icon: Icon }) => {
+      {visibleItems.map(({ to, label, icon: Icon }) => {
         const link = (
           <NavLink
             key={to}
