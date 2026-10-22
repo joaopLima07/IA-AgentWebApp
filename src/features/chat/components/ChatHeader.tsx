@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Archive, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +22,6 @@ import { RenameConversationDialog } from "@/features/conversations/components/Re
 import type { Conversation } from "@/types";
 
 export function ChatHeader({ conversation }: { conversation: Conversation }) {
-  const navigate = useNavigate();
   const archiveConversation = useArchiveConversation();
   const deleteConversation = useDeleteConversation();
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -77,7 +75,6 @@ export function ChatHeader({ conversation }: { conversation: Conversation }) {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={() => {
                 deleteConversation.mutate(conversation.id);
-                navigate("/");
               }}
             >
               Excluir
