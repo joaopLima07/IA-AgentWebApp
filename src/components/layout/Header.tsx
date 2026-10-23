@@ -1,7 +1,6 @@
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppLogo } from "./AppLogo";
-import { NotificationsMenu } from "./NotificationsMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { TutorialDialog } from "./TutorialDialog";
 import { UserMenu } from "./UserMenu";
@@ -30,7 +29,6 @@ export function Header({ onOpenMobileSidebar }: HeaderProps) {
       <div className="ml-auto flex items-center gap-1.5">
         <ThemeToggle />
         <TutorialDialog />
-        <NotificationsMenu />
         <UserMenu />
       </div>
     </header>
