@@ -19,7 +19,7 @@ export function MessageList({ messages, isLoading, onRetry }: MessageListProps) 
 
   if (isLoading) {
     return (
-      <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-6">
+      <div className="mx-auto w-full max-w-3xl 2xl:max-w-4xl space-y-6 px-4 py-6 sm:px-6">
         <Skeleton className="ml-auto h-10 w-2/3 rounded-2xl" />
         <Skeleton className="h-24 w-3/4 rounded-2xl" />
       </div>
@@ -27,7 +27,7 @@ export function MessageList({ messages, isLoading, onRetry }: MessageListProps) 
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-5 px-4 py-6 sm:px-6">
+    <div className="mx-auto w-full max-w-3xl 2xl:max-w-4xl space-y-5 px-4 py-6 sm:px-6">
       {messages.map((message) =>
         message.role === "USER" ? (
           <UserMessage key={message.id} message={message} />

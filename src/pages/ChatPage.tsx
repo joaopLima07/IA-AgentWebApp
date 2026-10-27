@@ -64,7 +64,7 @@ export default function ChatPage() {
         <MessageList messages={messages} isLoading={isLoading} />
       </div>
       <div className="border-t border-border bg-background px-4 py-3 sm:px-6">
-        <div className="mx-auto w-full max-w-3xl">
+        <div className="mx-auto w-full max-w-3xl 2xl:max-w-4xl">
           <MessageInput onSend={sendMessage} isStreaming={isStreaming} onStop={stopStreaming} />
           <p className="mt-1.5 text-center text-[11px] text-muted-foreground">
             Os agentes de IA podem cometer erros. Verifique informações importantes antes de agir com base nelas.

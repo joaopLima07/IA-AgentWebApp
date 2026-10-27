@@ -16,7 +16,7 @@ export default function SettingsPage() {
 
   return (
     <div className="h-full overflow-y-auto scrollbar-thin">
-      <div className="mx-auto max-w-3xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-3xl xl:max-w-4xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <PageHeader title="Configurações" description="Gerencie seu perfil." />
 
         <Card>

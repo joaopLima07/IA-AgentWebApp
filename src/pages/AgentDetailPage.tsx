@@ -57,7 +57,7 @@ export default function AgentDetailPage() {
 
   return (
     <div className="h-full overflow-y-auto scrollbar-thin">
-      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl 2xl:max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
         <Button variant="ghost" size="sm" className="mb-4 -ml-2 gap-1.5 text-muted-foreground" onClick={() => navigate("/agents")}>
           <ArrowLeft className="size-4" />
           Voltar para agentes

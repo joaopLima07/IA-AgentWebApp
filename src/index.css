@@ -138,6 +138,22 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  /* Larger monitors: scale the UI up instead of leaving it small in the middle of the screen. */
+  @media (min-width: 1536px) {
+    html {
+      font-size: 17px;
+    }
+  }
+  @media (min-width: 1920px) {
+    html {
+      font-size: 18px;
+    }
+  }
+  @media (min-width: 2400px) {
+    html {
+      font-size: 20px;
+    }
+  }
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "cv11", "ss01";

@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
   return (
     <div className="h-full overflow-y-auto scrollbar-thin">
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl 2xl:max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <PageHeader title="Painel" description="Desempenho da plataforma em todos os agentes e conversas." />
 
         {isError && <ErrorState description="Não foi possível carregar as métricas do painel." onRetry={() => refetch()} />}
