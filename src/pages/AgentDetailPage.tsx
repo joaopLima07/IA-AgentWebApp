@@ -15,6 +15,9 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AgentStatusBadge } from "@/features/agents/components/AgentStatusBadge";
+import { AgentAboutCard } from "@/features/agents/components/AgentAboutCard";
+import { parseDescription } from "@/features/agents/lib/description";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import type { Agent, AgentStatus } from "@/types";
@@ -61,25 +64,35 @@ export default function AgentDetailPage() {
         </Button>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-start gap-3">
-            <div className={cn("flex size-11 shrink-0 items-center justify-center rounded-lg text-white", draft.avatarColor)}>
-              <Bot className="size-5" />
+          <div className="flex min-w-0 items-start gap-4">
+            <div className={cn("flex size-14 shrink-0 items-center justify-center rounded-xl text-white shadow-sm", draft.avatarColor)}>
+              <Bot className="size-6" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg font-semibold tracking-tight">{draft.name}</h1>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-xl font-semibold tracking-tight">{draft.name}</h1>
                 <AgentStatusBadge status={draft.status} />
               </div>
-              <p className="mt-0.5 text-sm text-muted-foreground">{draft.description}</p>
-              <p className="mt-1 text-xs text-muted-foreground">Última atualização em {formatDate(draft.updatedAt)}</p>
+              <p className="mt-1 line-clamp-2 max-w-2xl text-sm text-muted-foreground">
+                {parseDescription(draft.description).summary}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
+                <Badge variant="outline">{draft.provider}</Badge>
+                <span>{draft.model}</span>
+                <span aria-hidden>·</span>
+                <span>Atualizado em {formatDate(draft.updatedAt)}</span>
+              </div>
             </div>
           </div>
 
           {canEdit ? (
-            <Button onClick={handleSave} disabled={!isDirty || updateAgent.isPending} className="shrink-0 gap-1.5">
-              <Save className="size-4" />
-              {updateAgent.isPending ? "Salvando..." : "Salvar alterações"}
-            </Button>
+            <div className="flex shrink-0 flex-col items-stretch gap-1.5 sm:items-end">
+              <Button onClick={handleSave} disabled={!isDirty || updateAgent.isPending} className="gap-1.5">
+                <Save className="size-4" />
+                {updateAgent.isPending ? "Salvando..." : "Salvar alterações"}
+              </Button>
+              {isDirty && <p className="text-xs text-muted-foreground">Você tem alterações não salvas.</p>}
+            </div>
           ) : (
             <Badge variant="outline" className="shrink-0 gap-1.5">
               <Lock className="size-3" />
@@ -98,32 +111,37 @@ export default function AgentDetailPage() {
 
           <fieldset disabled={!canEdit} className="m-0 min-w-0 border-0 p-0">
           <TabsContent value="information" className="space-y-5">
-            <div className="grid gap-2">
-              <Label htmlFor="agent-name">Nome do agente</Label>
-              <Input id="agent-name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="agent-desc">Descrição</Label>
-              <Textarea
-                id="agent-desc"
-                value={draft.description}
-                onChange={(e) => setDraft({ ...draft, description: e.target.value })}
-                rows={3}
-              />
-            </div>
-            <div className="grid max-w-xs gap-2">
-              <Label htmlFor="agent-status">Status</Label>
-              <Select value={draft.status} onValueChange={(v) => setDraft({ ...draft, status: v as AgentStatus })}>
-                <SelectTrigger id="agent-status">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ACTIVE">Ativo</SelectItem>
-                  <SelectItem value="PAUSED">Pausado</SelectItem>
-                  <SelectItem value="DRAFT">Rascunho</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Identificação</CardTitle>
+                <CardDescription>Como o agente aparece para a sua equipe.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-5 sm:grid-cols-[1fr_200px]">
+                <div className="grid gap-2">
+                  <Label htmlFor="agent-name">Nome do agente</Label>
+                  <Input id="agent-name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="agent-status">Status</Label>
+                  <Select value={draft.status} onValueChange={(v) => setDraft({ ...draft, status: v as AgentStatus })}>
+                    <SelectTrigger id="agent-status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ACTIVE">Ativo</SelectItem>
+                      <SelectItem value="PAUSED">Pausado</SelectItem>
+                      <SelectItem value="DRAFT">Rascunho</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            <AgentAboutCard
+              value={draft.description}
+              onChange={(description) => setDraft({ ...draft, description })}
+              canEdit={canEdit}
+            />
           </TabsContent>
 
           <TabsContent value="model" className="space-y-5">
